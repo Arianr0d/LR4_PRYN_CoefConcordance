@@ -25,13 +25,12 @@ void output(float full_result, pair<float, int> &result, vector<pair<float, int>
 	if (out.is_open()) {
 		out << "Ответ:";
 		for (int i = 0; i < matrix_result.size(); i++) {
-			out << "\nбез эксперта e" << matrix_result[i].second << ", R" << matrix_result[i].second << " = ";
-			out << round(matrix_result[i].first * 1000) / 1000 << ";";
+			out << "\nбез эксперта e" << matrix_result[i].second << ", R" << matrix_result[i].second << " = " 
+				<< round(matrix_result[i].first * 1000) / 1000 << ";";
 		}
-		out << "\n\nкоэффициент конкордации всей группы R = "; 
-		out << round(full_result * 1000) / 1000;
-		out << ", наиболее согласованная группа – без эксперта e" + to_string(result.second) + ", R" + to_string(result.second) + " = ";
-		out << round(result.first * 1000) / 1000;
+		out << "\n\nкоэффициент конкордации всей группы R = "  << round(full_result * 1000) / 1000 
+			<< ", наиболее согласованная группа – без эксперта e" << result.second << ", R" << result.second << " = " 
+			<< round(result.first * 1000) / 1000;
 	}
 }
 
