@@ -14,13 +14,21 @@ using namespace std;
 */
 
 // функция записи результата в файл
-void output(float full_result, pair<float, int> &result) {
+void output(float full_result, pair<float, int> &result, vector<pair<float, int>> &matrix_result) {
 
 	ofstream out;
 	out.open("output.txt");
 
+	sort(matrix_result.begin(), matrix_result.end(),
+		[](const auto& x, const auto& y) { return x.second < y.second; });
+	
 	if (out.is_open()) {
-		out << "Ответ: коэффициент конкордации всей группы R = "; 
+		out << "Ответ:";
+		for (int i = 0; i < matrix_result.size(); i++) {
+			out << "\nбез эксперта e" << matrix_result[i].second << ", R" << matrix_result[i].second << " = ";
+			out << round(matrix_result[i].first * 1000) / 1000 << ";";
+		}
+		out << "\n\nкоэффициент конкордации всей группы R = "; 
 		out << round(full_result * 1000) / 1000;
 		out << ", наиболее согласованная группа – без эксперта e" + to_string(result.second) + ", R" + to_string(result.second) + " = ";
 		out << round(result.first * 1000) / 1000;
@@ -63,13 +71,13 @@ void findCoefСoncordance(
 // функция поиска коэффициентов конкордации для каждой группы
 void findCoefСoncordanceAllGroup(
 	vector<vector<int>> &matrix_start,
+	vector<pair<float, int>> &matrix_result,
 	pair<float, int> &result,
 	float &full_result) {
 
 	// поиск коэффициента конкордации для всех экспертов
 	findCoefСoncordance(matrix_start, ref(full_result));
 
-	vector<pair<float, int>> matrix_result;
 	for (auto i = 0; i < matrix_start.size(); i++)
 	{
 		vector<vector<int>> copy_start_matrix(matrix_start.size(), vector<int>(matrix_start.front().size()));
@@ -146,13 +154,14 @@ int main() {
 	// считывание данных из файла
 	importFromFile(n, m, ref(A));
 
+	vector<pair<float, int>> matrix_result;
 	pair<float, int> result;
 	float full_result;
 	// рассчёт коэффициентов конкордации для всех групп
-	findCoefСoncordanceAllGroup(A, ref(result), ref(full_result));
+	findCoefСoncordanceAllGroup(A, ref(matrix_result), ref(result), ref(full_result));
 
 	// запись результата в файл
-	output(full_result, result);
+	output(full_result, result, matrix_result);
 
 	cout << "Результаты успешно сохранены!" << endl;
 	system("pause");
